@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job id="excel-diff" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0">
+  <step id="diff">
+    <chunk item-count="100000">
+      <reader ref="ICRHReader">
+        <properties>
+          <property name="path" value="#{jobParameters['forquart']}" />
+        </properties>
+      </reader>
+      <processor ref="ForQuartProcessor">
+        <properties>
+          <property name="path" value="#{jobParameters['icrh']}" />
+          <property name="referenceColumn" value="#{jobParameters['referenceColumn']}" />
+          <property name="inputReferenceColumn" value="#{jobParameters['inputReferenceColumn']}" />
+        </properties>
+      </processor>
+      <writer ref="diffLogger" />
+    </chunk>
+  </step>
+</job>
