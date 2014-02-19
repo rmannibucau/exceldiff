@@ -7,8 +7,11 @@ import org.apache.poi.ss.usermodel.Row;
 import javax.batch.api.chunk.ItemReader;
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 public class ForQuartReader extends ExcelBase implements ItemReader {
+    private static final Logger LOGGER = Logger.getLogger(ForQuartReader.class.getName());
+
     private ClosableIterator iterator;
 
     @Override
@@ -31,12 +34,17 @@ public class ForQuartReader extends ExcelBase implements ItemReader {
                 continue;
             }
 
-            return new Line(
-                    row.getCell(0).getStringCellValue(),
-                    row.getCell(1).getStringCellValue().trim().toLowerCase(Locale.ENGLISH),
-                    row.getCell(2).getStringCellValue(),
+            try {
+                return new Line(
+                    forceString(row.getCell(0)),
+                    forceString(row.getCell(1)).trim().toLowerCase(Locale.ENGLISH),
+                    forceString(row.getCell(2)),
                     row.getCell(3).getDateCellValue(),
                     row.getCell(4).getDateCellValue());
+            } catch (final IllegalStateException ise) {
+                LOGGER.severe("Can't parse line: " + row);
+                throw ise;
+            }
         }
         return null;
     }

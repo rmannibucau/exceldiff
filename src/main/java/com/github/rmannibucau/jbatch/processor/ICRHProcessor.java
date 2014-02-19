@@ -66,10 +66,10 @@ public class ICRHProcessor extends ExcelBase implements ItemProcessor {
                 final String nni = row.getCell(1).getStringCellValue();
                 final Line line = new Line(
                         nni.substring(0, max(0, nni.length() - 2)),
-                        row.getCell(0).getStringCellValue().trim().toLowerCase(Locale.ENGLISH),
-                        row.getCell(2).getStringCellValue(),
-                        simpleDateFormat.parse(row.getCell(4).getStringCellValue()),
-                        simpleDateFormat.parse(row.getCell(5).getStringCellValue())); // not standard date format
+                        forceString(row.getCell(0)).trim().toLowerCase(Locale.ENGLISH),
+                        forceString(row.getCell(2)),
+                        simpleDateFormat.parse(forceString(row.getCell(4))),
+                        simpleDateFormat.parse(forceString(row.getCell(5)))); // not standard date format
                 Collection<Line> lines = sheet.get(line.getNni());
                 if (lines == null) {
                     lines = new LinkedList<>();

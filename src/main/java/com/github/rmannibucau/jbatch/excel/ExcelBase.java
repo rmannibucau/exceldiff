@@ -1,6 +1,7 @@
 package com.github.rmannibucau.jbatch.excel;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -45,6 +46,14 @@ public abstract class ExcelBase {
         }
 
         return closableIterator;
+    }
+
+    protected static String forceString(final Cell cell) {
+        try {
+            return cell.getStringCellValue();
+        } catch (final IllegalStateException ise) {
+            return Double.toString(cell.getNumericCellValue());
+        }
     }
 
     public static class ClosableIterator implements Iterator<Row>, AutoCloseable {
