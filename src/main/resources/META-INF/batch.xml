@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <batch-artifacts xmlns="http://xmlns.jcp.org/xml/ns/javaee">
-  <ref id="ICRHReader" class="com.github.rmannibucau.jbatch.reader.ForQuartReader" />
-  <ref id="ForQuartProcessor" class="com.github.rmannibucau.jbatch.processor.ICRHProcessor" />
+  <ref id="ForQuartReader" class="com.github.rmannibucau.jbatch.reader.ForQuartReader" />
+  <ref id="ICRHProcessor" class="com.github.rmannibucau.jbatch.processor.ICRHProcessor" />
   <ref id="diffLogger" class="com.github.rmannibucau.jbatch.writer.DiffLogger" />
 </batch-artifacts>

@@ -2,19 +2,22 @@
 <job id="excel-diff" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0">
   <step id="diff">
     <chunk item-count="100000">
-      <reader ref="ICRHReader">
+      <reader ref="ForQuartReader">
         <properties>
           <property name="path" value="#{jobParameters['forquart']}" />
+          <property name="filter" value="#{jobParameters['filter']}" />
         </properties>
       </reader>
-      <processor ref="ForQuartProcessor">
+      <processor ref="ICRHProcessor">
         <properties>
           <property name="path" value="#{jobParameters['icrh']}" />
-          <property name="referenceColumn" value="#{jobParameters['referenceColumn']}" />
-          <property name="inputReferenceColumn" value="#{jobParameters['inputReferenceColumn']}" />
         </properties>
       </processor>
-      <writer ref="diffLogger" />
+      <writer ref="diffLogger">
+        <properties>
+          <property name="file" value="#{jobParameters['output']}" />
+        </properties>
+      </writer>
     </chunk>
   </step>
 </job>

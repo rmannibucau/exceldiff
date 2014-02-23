@@ -4,7 +4,9 @@ import com.github.rmannibucau.jbatch.diff.Line;
 import com.github.rmannibucau.jbatch.excel.ExcelBase;
 import org.apache.poi.ss.usermodel.Row;
 
+import javax.batch.api.BatchProperty;
 import javax.batch.api.chunk.ItemReader;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -13,6 +15,10 @@ public class ForQuartReader extends ExcelBase implements ItemReader {
     private static final Logger LOGGER = Logger.getLogger(ForQuartReader.class.getName());
 
     private ClosableIterator iterator;
+
+    @Inject
+    @BatchProperty
+    private String filter;
 
     @Override
     public void open(final Serializable serializable) throws Exception {
@@ -34,11 +40,16 @@ public class ForQuartReader extends ExcelBase implements ItemReader {
                 continue;
             }
 
+            final String name = forceString(row.getCell(2));
+            if (filter != null && !name.contains(filter)) {
+                continue;
+            }
+
             try {
                 return new Line(
                     forceString(row.getCell(0)),
                     forceString(row.getCell(1)).trim().toLowerCase(Locale.ENGLISH),
-                    forceString(row.getCell(2)),
+                        name,
                     row.getCell(3).getDateCellValue(),
                     row.getCell(4).getDateCellValue());
             } catch (final IllegalStateException ise) {
