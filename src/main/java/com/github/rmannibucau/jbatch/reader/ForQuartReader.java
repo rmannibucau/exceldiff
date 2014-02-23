@@ -19,10 +19,14 @@ public class ForQuartReader extends ExcelBase implements ItemReader {
     @Inject
     @BatchProperty
     private String filter;
+    private String[] filters = null;
 
     @Override
     public void open(final Serializable serializable) throws Exception {
         iterator = newIterator();
+        if (filter != null) {
+            filters = filter.split(",");
+        }
     }
 
     @Override
@@ -41,8 +45,16 @@ public class ForQuartReader extends ExcelBase implements ItemReader {
             }
 
             final String name = forceString(row.getCell(2));
-            if (filter != null && !name.contains(filter)) {
-                continue;
+            boolean filtered = false;
+            if (filters != null) {
+                for (final String filter : filters) {
+                    if (name.contains(filter)) {
+                        filtered = true;
+                    }
+                }
+                if (!filtered) {
+                    continue;
+                }
             }
 
             try {
