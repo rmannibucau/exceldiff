@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class DiffLogger extends AbstractItemWriter {
+    private static final String SEP = ";";
+
     private final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
     @Inject
@@ -39,14 +41,15 @@ public class DiffLogger extends AbstractItemWriter {
         try {
             ps.println("Intersection size: " + objects.size());
             ps.println();
-            ps.println("nni,resource,name(forquartz),start(forquartz),end(forquartz),name(ichr),start(ichr),end(forquartz)");
+            ps.println("nni" + SEP + "resource" + SEP + "name(forquartz)" + SEP + "start(forquartz)" + SEP + "end(forquartz)"
+                    + SEP + "name(ichr)" + SEP + "start(ichr)" + SEP + "end(forquartz)");
             for (final Object o : objects) {
                 final ICRHProcessor.Diff diff = ICRHProcessor.Diff.class.cast(o);
                 final Line forQuartz = diff.getForQuartz();
                 final Line ichr = diff.getIchr();
-                ps.println(forQuartz.getNni() + "," + forQuartz.getResource()
-                        + "," + forQuartz.getName() + "," + format.format(forQuartz.getBeginning()) + "," + format.format(forQuartz.getEnd())
-                        + "," + ichr.getName() + "," + format.format(ichr.getBeginning()) + "," + format.format(ichr.getEnd()));
+                ps.println(forQuartz.getNni() + SEP + forQuartz.getResource()
+                        + SEP + forQuartz.getName() + SEP + format.format(forQuartz.getBeginning()) + SEP + format.format(forQuartz.getEnd())
+                        + SEP + ichr.getName() + SEP + format.format(ichr.getBeginning()) + SEP + format.format(ichr.getEnd()));
             }
         } finally {
             ps.close();

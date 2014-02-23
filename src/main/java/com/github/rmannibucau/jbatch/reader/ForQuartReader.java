@@ -7,7 +7,12 @@ import org.apache.poi.ss.usermodel.Row;
 import javax.batch.api.BatchProperty;
 import javax.batch.api.chunk.ItemReader;
 import javax.inject.Inject;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -25,7 +30,19 @@ public class ForQuartReader extends ExcelBase implements ItemReader {
     public void open(final Serializable serializable) throws Exception {
         iterator = newIterator();
         if (filter != null) {
-            filters = filter.split(",");
+            final File filterFile = new File(filter);
+            if (filterFile.isFile()) {
+                final Collection<String> f = new LinkedList<>();
+                try (final BufferedReader reader = new BufferedReader(new FileReader(filterFile))) {
+                    String s;
+                    while ((s = reader.readLine()) != null) {
+                        f.add(s);
+                    }
+                }
+                filters = f.toArray(new String[f.size()]);
+            } else {
+                filters = filter.split(",");
+            }
         }
     }
 
